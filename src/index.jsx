@@ -1,13 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import '@tabler/core/dist/css/tabler.css'
+
 import App from './App';
+import Login from './container/Login';
+
 import reportWebVitals from './reportWebVitals';
+import ProtectedRoute from './component/ProtectedRoute';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<App />} />
+        <Route path='login' element=
+          {
+            <ProtectedRoute loginOnly={false}>
+              <Login />
+            </ProtectedRoute>
+          } 
+        />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
