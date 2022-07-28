@@ -9,6 +9,7 @@ import Login from './container/Login';
 
 import reportWebVitals from './reportWebVitals';
 import ProtectedRoute from './component/ProtectedRoute';
+import Register from './container/Register';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,6 +21,13 @@ root.render(
           {
             <ProtectedRoute loginOnly={false}>
               <Login />
+            </ProtectedRoute>
+          } 
+        />
+        <Route path='register' element=
+          {
+            <ProtectedRoute loginOnly={false}>
+              <Register />
             </ProtectedRoute>
           } 
         />

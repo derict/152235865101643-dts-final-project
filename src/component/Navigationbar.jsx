@@ -47,7 +47,7 @@ const Navigationbar = () => {
                         <NavDropdown.Item>
                             <IconUserCircle />
                             <div className="d-none d-xl-block ps-2">
-                                <div>{user ? (auth.currentUser.email) : 'Guest'}</div>
+                                <div>{user ? (auth.currentUser.displayName) : 'Guest'}</div>
                             </div>
                         </NavDropdown.Item>
                         <NavDropdown.Divider />
