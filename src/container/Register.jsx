@@ -16,7 +16,7 @@ const Register = () => {
         const email = data.get('email')
         const password = data.get('passwd')
 
-        try{
+        try {
             await createUserWithEmailAndPassword(auth, email, password)
             const loginUser = getAuth()
             await updateProfile(loginUser.currentUser, {
@@ -31,10 +31,10 @@ const Register = () => {
     const handleGoogle = async () => {
         const provider = new GoogleAuthProvider()
         const authGoogle = getAuth()
-        try{
+        try {
             await signInWithPopup(authGoogle, provider)
             navigate('/')
-        } catch (err){
+        } catch (err) {
             setErrMessage(err.message.replace('Firebase: ', ''))
         }
     }

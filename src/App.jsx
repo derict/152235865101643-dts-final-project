@@ -1,3 +1,4 @@
+import Footerbar from './component/Footerbar';
 import Navigationbar from './component/Navigationbar';
 import Home from './container/Home';
 
@@ -5,7 +6,10 @@ const App = () => {
   return (
     <>
       <Navigationbar />
-      <Home />
+      <div className='page-wrapper'>
+        <Home />
+        <Footerbar />
+      </div>
     </>
   );
 }

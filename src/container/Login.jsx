@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router-dom'
 
 import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import { auth } from "../config/firebase"
+import { Modal } from 'react-bootstrap'
 
-const Login = () => {
+const Login = (props) => {
     const navigate = useNavigate()
     const [errMessage, setErrMessage] = useState('')
 
@@ -17,6 +18,7 @@ const Login = () => {
         const passwd = data.get('passwd')
         try {
             await signInWithEmailAndPassword(auth, email, passwd)
+            props.onHide(true)
             navigate('/')
         } catch (err) {
             setErrMessage(err.message.replace('Firebase: ', ''))
@@ -28,6 +30,7 @@ const Login = () => {
         const authGoogle = getAuth()
         try{
             await signInWithPopup(authGoogle, provider)
+            props.onHide(true)
             navigate('/')
         } catch (err){
             setErrMessage(err.message.replace('Firebase: ', ''))
@@ -35,6 +38,12 @@ const Login = () => {
     }
 
     return (
+        <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
         <div className='page page-center' style={{ minHeight: '70vh' }}>
             <div className='container-tight py-4'>
                 <div className='text-center mb-4'>
@@ -74,6 +83,7 @@ const Login = () => {
                 </div>
             </div>
         </div>
+        </Modal>
     )
 }
 
