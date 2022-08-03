@@ -57,7 +57,7 @@ const Home = () => {
                         <Row className="row-cards">
                             {
                                 dataHost.map(data => (
-                                    <ItemCard key={data.hostid} hostid={data.hostid} name={data.name} />
+                                    <ItemCard key={data.hostid} hostid={data.hostid} name={data.name}/>
                                 ))
                             }
                         </Row>

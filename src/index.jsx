@@ -5,11 +5,11 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import '@tabler/core/dist/css/tabler.css'
 
 import App from './App';
-import Login from './container/Login';
 
 import reportWebVitals from './reportWebVitals';
 import ProtectedRoute from './component/ProtectedRoute';
 import Register from './container/Register';
+import PageSos from './container/PageSos';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,13 +17,6 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<App />} />
-        <Route path='login' element=
-          {
-            <ProtectedRoute loginOnly={false}>
-              <Login />
-            </ProtectedRoute>
-          } 
-        />
         <Route path='register' element=
           {
             <ProtectedRoute loginOnly={false}>
@@ -31,6 +24,7 @@ root.render(
             </ProtectedRoute>
           } 
         />
+        <Route path='*' element={<PageSos />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

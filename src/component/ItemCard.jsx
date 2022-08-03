@@ -1,10 +1,19 @@
 import { IconArrowDown, IconArrowUp } from "@tabler/icons"
 import { useEffect, useState } from "react"
-import { Badge, Card, Col, Row } from "react-bootstrap"
+import { Card, Col, Dropdown, Row } from "react-bootstrap"
 import { TOKEN, URI, zbx } from "../apis/zbx"
+import { auth } from "../config/firebase"
+import { useAuthState } from "react-firebase-hooks/auth"
+import DelHost from "../container/DelHost"
+import EditHost from "../container/EditHost"
 
 const ItemCard = ({ hostid, name }) => {
     const [dataItem, setDataItem] = useState([0, 0, 0])
+
+    const [delHost, setDelHost] = useState(false)
+    const [editHost, setEditHost] = useState(false)
+
+    const [user] = useAuthState(auth)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,26 +40,52 @@ const ItemCard = ({ hostid, name }) => {
     }, [hostid])
 
     return (
-        <Col xl={3} md={6}>
-            <Card className="card-sm">
-                <Card.Body>
-                    <Row className="align-items-center">
-                        <Col className="col-auto">
-                            <span className={dataItem[0].lastvalue > 0 ? 'bg-green-lt avatar' : 'bg-red-lt avatar'}>
-                                {dataItem[0].lastvalue > 0 ? <IconArrowUp /> : <IconArrowDown />}
-                            </span>
-                        </Col>
-                        <Col>
-                            <div className="font-weight-medium">{name}</div>
-                            <div className="text-muted">{parseInt(dataItem[2].lastvalue * 1000)} ms</div>
-                        </Col>
-                        <Col className="col-auto align-self-center">
-                            <Badge bg={dataItem[0].lastvalue > 0 ? 'primary' : 'danger'} />
-                        </Col>
-                    </Row>
-                </Card.Body>
-            </Card>
-        </Col>
+        <>
+            <Col xl={3} md={6}>
+                <Card className="card-sm">
+                    <Card.Body>
+                        <Row className="align-items-center">
+                            <Col className="col-auto">
+                                <span className={dataItem[0].lastvalue > 0 ? 'bg-green-lt avatar' : 'bg-red-lt avatar'}>
+                                    {dataItem[0].lastvalue > 0 ? <IconArrowUp /> : <IconArrowDown />}
+                                </span>
+                            </Col>
+                            <Col>
+                                <div className="font-weight-medium">{name}</div>
+                                <div className="text-muted">{dataItem[1].lastvalue === '100' ? 'timeout' : parseInt(dataItem[2].lastvalue * 1000) + ' ms'}</div>
+                            </Col>
+                            {
+                                user ?
+                                    <Col className="col-auto align-self-center">
+                                        <Dropdown>
+                                            <Dropdown.Toggle as='div'>
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item onClick={() => setEditHost(true)}>Edit</Dropdown.Item>
+                                                <Dropdown.Divider></Dropdown.Divider>
+                                                <Dropdown.Item className='text-danger' onClick={() => setDelHost(true)}>Delete</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </Col>
+                                    :
+                                    <></>
+                            }
+                        </Row>
+                    </Card.Body>
+                </Card>
+            </Col>
+            <DelHost
+                show={delHost}
+                onHide={() => setDelHost(false)}
+                hostid={hostid}
+            />
+            <EditHost
+                show={editHost}
+                onHide={() => setEditHost(false)}
+                hostid={hostid}
+                name={name}
+            />
+        </>
     )
 
 }
