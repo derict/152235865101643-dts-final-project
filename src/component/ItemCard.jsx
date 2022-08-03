@@ -6,12 +6,14 @@ import { auth } from "../config/firebase"
 import { useAuthState } from "react-firebase-hooks/auth"
 import DelHost from "../container/DelHost"
 import EditHost from "../container/EditHost"
+import DetailHost from "../container/DetailHost"
 
 const ItemCard = ({ hostid, name }) => {
     const [dataItem, setDataItem] = useState([0, 0, 0])
 
     const [delHost, setDelHost] = useState(false)
     const [editHost, setEditHost] = useState(false)
+    const [detailHost, setDetailHost] = useState(false)
 
     const [user] = useAuthState(auth)
 
@@ -22,7 +24,7 @@ const ItemCard = ({ hostid, name }) => {
                     jsonrpc: '2.0',
                     method: 'item.get',
                     params: {
-                        output: ["key_", "lastvalue", "prevvalue"],
+                        output: ["itemid", "name", "lastclock", "lastvalue", "prevvalue"],
                         hostids: hostid
                     },
                     id: 1,
@@ -50,7 +52,7 @@ const ItemCard = ({ hostid, name }) => {
                                     {dataItem[0].lastvalue > 0 ? <IconArrowUp /> : <IconArrowDown />}
                                 </span>
                             </Col>
-                            <Col>
+                            <Col onClick={() => setDetailHost(true)}>
                                 <div className="font-weight-medium">{name}</div>
                                 <div className="text-muted">{dataItem[1].lastvalue === '100' ? 'timeout' : parseInt(dataItem[2].lastvalue * 1000) + ' ms'}</div>
                             </Col>
@@ -84,6 +86,13 @@ const ItemCard = ({ hostid, name }) => {
                 onHide={() => setEditHost(false)}
                 hostid={hostid}
                 name={name}
+            />
+            <DetailHost
+                show={detailHost}
+                onHide={() => setDetailHost(false)}
+                hostid={hostid}
+                name={name}
+                dataItem={dataItem}
             />
         </>
     )

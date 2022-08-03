@@ -74,7 +74,7 @@ const EditHost = ({ show, onHide, hostid, name }) => {
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
                     <Form.Label>Hostname</Form.Label>
-                    <input name="hostname" type="text" className="form-control" placeholder={name} required />
+                    <input name="hostname" type="text" className="form-control" placeholder={name} required autoFocus/>
                 </Modal.Body>
                 <Modal.Footer>
                     <div className="w-100">

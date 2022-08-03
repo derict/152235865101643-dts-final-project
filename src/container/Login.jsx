@@ -48,7 +48,7 @@ const Login = ({ show, onHide }) => {
                     <Form onSubmit={handleSubmit}>
                         <Col lg={12}>
                             <Form.Label>Username</Form.Label>
-                            <input name="email" type="text" className="form-control" placeholder="Email" required />
+                            <input name="email" type="text" className="form-control" placeholder="Email" required autoFocus/>
                         </Col>
                         <Col lg={12}>
                             <Form.Label>Password</Form.Label>

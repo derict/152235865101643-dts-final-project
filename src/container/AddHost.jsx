@@ -49,7 +49,7 @@ const AddHost = ({ show, onHide }) => {
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
                     <Form.Label>Hostname</Form.Label>
-                    <input name="hostname" type="text" className="form-control" placeholder="example.com / 8.8.8.8" required />
+                    <input name="hostname" type="text" className="form-control" placeholder="example.com / 8.8.8.8" required autoFocus/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="light" className="me-auto" onClick={() => onHide(false)}>Cancel</Button>
