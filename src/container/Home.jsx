@@ -26,7 +26,7 @@ const Home = () => {
                     id: 1,
                     auth: TOKEN
                 })
-                setDataHost(fetchedData.data.result)
+                setDataHost(fetchedData.data?.result)
             } catch (err) {
                 console.log(err)
             }
@@ -42,7 +42,7 @@ const Home = () => {
                         <Row className="g-2 align-items-center">
                             <Col>
                                 <div className="page-title">PINGs</div>
-                                <div className="text-muted mt-1">{dataHost.length} host</div>
+                                <div className="text-muted mt-1">{dataHost?.length} host</div>
                             </Col>
                             <Col xs={12} md="auto" className="ms-auto d-print-none">
                                 <div className="d-flex">
@@ -57,7 +57,7 @@ const Home = () => {
                         <Row className="row-cards">
                             {
                                 dataHost.map(data => (
-                                    <ItemCard key={data.hostid} hostid={data.hostid} name={data.name}/>
+                                    <ItemCard key={data?.hostid} hostid={data?.hostid} name={data?.name}/>
                                 ))
                             }
                         </Row>

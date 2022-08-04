@@ -1,7 +1,21 @@
 import { Col, Modal, Row } from "react-bootstrap"
 import GraphItem from "../component/GraphItem"
 
-const DetailHost = ({ show, onHide, dataItem, name }) => {
+const DetailHost = ({ show, onHide, dataItem, name, hostid }) => {
+
+    const normalize = (key, data) => {
+        if(key === 'icmpping'){
+            if(data === '1'){ return 'normal'}
+            else{ return 'timeout'}
+        }
+        if(key === 'icmppingloss'){
+            return parseInt(data) +'%'
+        }
+        if(key === 'icmppingsec'){
+            return parseInt(data * 1000) +' ms'
+        }
+    }
+
     return (
         <Modal
             show={show}
@@ -18,36 +32,33 @@ const DetailHost = ({ show, onHide, dataItem, name }) => {
             </Modal.Header>
             <Modal.Body>
                 <strong>
-                    <Row>
+                    <Row className='text-center'>
                         <Col>Sensor</Col>
-                        <Col>LastUpdate</Col>
                         <Col>LastValue</Col>
                         <Col>PreviousValue</Col>
                     </Row>
                 </strong>
                 {
                     dataItem.map(data => (
-                        <Row className="text-muted">
-                            <Col key={data.itemid} lg={3}>
-                                {data.name}
+                        <Row  key={hostid * Math.random()} className="text-muted">
+                            <Col lg={4}>
+                                {data?.name}
                             </Col>
-                            <Col key={data.itemid + '2'} lg={3}>
-                                {data.lastclock}
+                            <Col lg={4} className='text-center'>
+                                {normalize(data?.key_, data?.lastvalue)}
                             </Col>
-                            <Col key={data.itemid + '3'} lg={3}>
-                                {data.lastvalue}
-                            </Col>
-                            <Col key={data.itemid + '4'} lg={3}>
-                                {data.prevvalue}
+                            <Col lg={4} className='text-center'>
+                                {normalize(data?.key_, data?.prevvalue)}
                             </Col>
                         </Row>
                     ))
                 }
-                <Row>
-                    <GraphItem itemid={dataItem[2].itemid} />
+                <Row className="mt-5">
+                    <GraphItem itemid={dataItem[2]?.itemid} />
                 </Row>
             </Modal.Body>
             <Modal.Footer>
+                <strong>Last Update:</strong> {Date(dataItem[0]?.lastclock * 1000).toLocaleString()}
             </Modal.Footer>
         </Modal>
     )

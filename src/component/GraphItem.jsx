@@ -3,8 +3,7 @@ import Chart from 'react-apexcharts'
 import { TOKEN, URI, zbx } from '../apis/zbx'
 
 const GraphItem = ({ itemid }) => {
-    const [value, setValue] = useState()
-    const [date, setDate] = useState()
+    const [value, setValue] = useState([])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -15,13 +14,13 @@ const GraphItem = ({ itemid }) => {
                     params: {
                         output: ["clock", "value_avg"],
                         itemids: [itemid],
+                        time_from: (Date.now() / 1000) - 86400,
                         limit: "24"
                     },
                     id: 1,
                     auth: TOKEN
                 })
-                setValue(fetchedData.data.result?.map((data) => data.value_avg))
-                setDate(fetchedData.data.result?.map((data) => data.clock))
+                setValue(fetchedData.data.result?.map((data) => [((parseInt(data?.clock) + 25200) * 1000), parseInt(data?.value_avg * 1000)]))
             } catch (err) {
                 console.log(err)
             }
@@ -30,18 +29,48 @@ const GraphItem = ({ itemid }) => {
     }, [itemid])
 
     const options = {
-        chart: { id: 'bar-chart' },
+        chart: {
+            id: 'trend',
+            type: 'area',
+            zoom: {
+                autoScaleYaxis: true
+            }
+        },
+        title: {
+            text: 'Trend 24 Hours',
+            style: {
+                fontWeight: 'bold'
+            }
+        },
+        stroke: {
+            width: 2,
+            curve: 'smooth'
+        },
+        xaxis: {
+            type: 'datetime'
+        },
+        yaxis: {
+            title: {
+                text: '(ms)',
+                style: {
+                    fontWeight: 'normal'
+                }
+            }
+        },
+        tooltip: {
+            x: {
+                format: 'dd MMM - HH:mm'
+            }
+        },
     }
 
-    const series = {
-        data: {
-            x: date,
-            y: value
-        }
-    }
+    const series = [{
+        name: 'Ping',
+        data: value
+    }]
 
     return (
-        <Chart options={options} series={series} type='line' width='450' />
+        <Chart options={options} series={series} />
     )
 }
 

@@ -48,9 +48,9 @@ const Login = ({ show, onHide }) => {
                     <Form onSubmit={handleSubmit}>
                         <Col lg={12}>
                             <Form.Label>Username</Form.Label>
-                            <input name="email" type="text" className="form-control" placeholder="Email" required autoFocus/>
+                            <input name="email" type="text" className="form-control" placeholder="Email" required autoFocus />
                         </Col>
-                        <Col lg={12}>
+                        <Col lg={12} className='mt-3'>
                             <Form.Label>Password</Form.Label>
                             <input name="passwd" type="password" className="form-control" placeholder="Password" required />
                         </Col>
@@ -71,9 +71,6 @@ const Login = ({ show, onHide }) => {
                     </Col>
                 </Row>
             </Modal.Body>
-            <div className="text-center text-muted mb-3">
-                Don't have account yet? <a href="/register">Register</a>
-            </div>
         </Modal>
     )
 }

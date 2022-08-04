@@ -24,22 +24,22 @@ const ItemCard = ({ hostid, name }) => {
                     jsonrpc: '2.0',
                     method: 'item.get',
                     params: {
-                        output: ["itemid", "name", "lastclock", "lastvalue", "prevvalue"],
+                        output: ["name", "key_", "lastclock", "lastvalue", "prevvalue"],
                         hostids: hostid
                     },
                     id: 1,
                     auth: TOKEN
                 })
-                setDataItem(fetchedData.data.result)
+                setDataItem(fetchedData.data?.result)
             } catch (err) {
                 console.log(err)
             }
         }
         fetchData()
-        setInterval(() => {
-            fetchData()
-        }, 60000)
-    }, [hostid])
+        // setInterval(() => {
+        //     fetchData()
+        // }, 60000)
+    }, [user, hostid])
 
     return (
         <>
@@ -48,13 +48,13 @@ const ItemCard = ({ hostid, name }) => {
                     <Card.Body>
                         <Row className="align-items-center">
                             <Col className="col-auto">
-                                <span className={dataItem[0].lastvalue > 0 ? 'bg-green-lt avatar' : 'bg-red-lt avatar'}>
+                                <span className={dataItem[0]?.lastvalue > 0 ? 'bg-green-lt avatar' : 'bg-red-lt avatar'}>
                                     {dataItem[0].lastvalue > 0 ? <IconArrowUp /> : <IconArrowDown />}
                                 </span>
                             </Col>
-                            <Col onClick={() => setDetailHost(true)}>
+                            <Col onClick={user ? () => setDetailHost(true) : null}>
                                 <div className="font-weight-medium">{name}</div>
-                                <div className="text-muted">{dataItem[1].lastvalue === '100' ? 'timeout' : parseInt(dataItem[2].lastvalue * 1000) + ' ms'}</div>
+                                <div className="text-muted">{dataItem[1]?.lastvalue === '100' ? 'timeout' : parseInt(dataItem[2]?.lastvalue * 1000) + ' ms'}</div>
                             </Col>
                             {
                                 user ?
@@ -87,13 +87,19 @@ const ItemCard = ({ hostid, name }) => {
                 hostid={hostid}
                 name={name}
             />
-            <DetailHost
-                show={detailHost}
-                onHide={() => setDetailHost(false)}
-                hostid={hostid}
-                name={name}
-                dataItem={dataItem}
-            />
+            {
+                user ?
+                    <DetailHost
+                        key={hostid * Math.random()}
+                        show={detailHost}
+                        onHide={() => setDetailHost(false)}
+                        hostid={hostid}
+                        name={name}
+                        dataItem={dataItem}
+                    />
+                    :
+                    <></>
+            }
         </>
     )
 

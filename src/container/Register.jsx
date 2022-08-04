@@ -1,12 +1,11 @@
-import { IconBrandGoogle, IconUserPlus } from "@tabler/icons"
+import { IconBrandGoogle } from "@tabler/icons"
 import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithPopup, updateProfile } from "firebase/auth"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Button, Col, Form, Modal, Row } from "react-bootstrap"
 import { auth } from "../config/firebase"
 
 
-const Register = () => {
-    const navigate = useNavigate()
+const Register = ({ show, onHide }) => {
     const [errMessage, setErrMessage] = useState()
 
     const handleSubmit = async (e) => {
@@ -22,7 +21,7 @@ const Register = () => {
             await updateProfile(loginUser.currentUser, {
                 displayName: username
             })
-            navigate('/')
+            onHide(true)
         } catch (err) {
             setErrMessage(err.message)
         }
@@ -33,56 +32,55 @@ const Register = () => {
         const authGoogle = getAuth()
         try {
             await signInWithPopup(authGoogle, provider)
-            navigate('/')
+            onHide(true)
         } catch (err) {
             setErrMessage(err.message.replace('Firebase: ', ''))
         }
     }
 
     return (
-        <div className='page page-center' style={{ minHeight: '70vh' }}>
-            <div className='container-tight py-4'>
-                <div className='text-center mb-4'>
-                    <IconUserPlus
-                        color="#206bc4"
-                        style={{ width: 140, height: 140 }}
-                    />
-                </div>
-                <form className="card card-md" onSubmit={handleSubmit}>
-                    <div className="card-body">
-                        <div className="card-title text-center mb-4">Create New Account</div>
-                        <div className="mb-3">
-                            <label className="form-label">Username</label>
-                            <input name="username" type="text" className="form-control" placeholder="Username" required />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Email</label>
+        <Modal
+            show={show}
+            onHide={onHide}
+            centered
+        >
+            <div className='modal-status bg-success'></div>
+            <Modal.Header>
+                <Modal.Title>Register</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Row>
+                    <Form onSubmit={handleSubmit}>
+                        <Col lg={12}>
+                            <Form.Label>Username</Form.Label>
+                            <input name="username" type="text" className="form-control" placeholder="Username" required autoFocus />
+                        </Col>
+                        <Col lg={12} className='mt-3'>
+                            <Form.Label>Email</Form.Label>
                             <input name="email" type="text" className="form-control" placeholder="Email" required />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Password</label>
+                        </Col>
+                        <Col lg={12} className='mt-3'>
+                            <Form.Label>Password</Form.Label>
                             <input name="passwd" type="password" className="form-control" placeholder="Password" required />
-                        </div>
-                        <div className='text-center'><span className='bg-red-lt'>{errMessage}</span></div>
-                        <div className="form-footer">
+                        </Col>
+                        <Col lg={12} className='mt-3'>
                             <button type="submit" className="btn btn-primary w-100">Register</button>
-                        </div>
+                        </Col>
+                    </Form>
+                    <Col lg={12} className='text-center mt-3 bg-red-lt'>
+                        {errMessage}
+                    </Col>
+                    <Col lg={12}>
                         <div className="hr-text">or</div>
-                        <div className="card-body">
-                            <div className="row">
-                                <div className="col btn btn-white w-100" onClick={handleGoogle}>
-                                    <IconBrandGoogle />
-                                    Register with Google
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <div className="text-center text-muted mt-3">
-                    Already have account? <a href="/login">Login</a>
-                </div>
-            </div>
-        </div>
+                    </Col>
+                    <Col lg={12}>
+                        <Button variant='light' className='w-100' onClick={handleGoogle}>
+                            <IconBrandGoogle />Login with Google
+                        </Button>
+                    </Col>
+                </Row>
+            </Modal.Body>
+        </Modal>
     )
 }
 
